@@ -1,11 +1,354 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Flexiwork — Coming Soon</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #0d0d0d;
+      --paper: #f5f0e8;
+      --accent: #e84c2b;
+      --accent2: #f9a825;
+      --muted: #8a8070;
+      --card: #fffcf5;
+    }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* noise texture */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.6;
+    }
+
+    /* diagonal stripe bg */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 40px,
+        rgba(232,76,43,0.04) 40px,
+        rgba(232,76,43,0.04) 41px
+      );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.6rem 3rem;
+      border-bottom: 1.5px solid var(--ink);
+      position: relative;
+      z-index: 10;
+    }
+
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.5rem;
+      letter-spacing: -0.04em;
+    }
+    .logo span { color: var(--accent); }
+
+    .nav-tag {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border: 1px solid var(--muted);
+      padding: 0.35rem 0.9rem;
+      border-radius: 100px;
+    }
+
+    /* MAIN */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    .gear-wrap {
+      margin-bottom: 2.5rem;
+      width: 90px;
+      height: 90px;
+      animation: gearSpin 7s linear infinite;
+    }
+    @keyframes gearSpin { to { transform: rotate(360deg); } }
+
+    .eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      animation: fadeUp 0.6s 0.1s both;
+    }
+    .eyebrow::before, .eyebrow::after {
+      content: '';
+      display: inline-block;
+      width: 1.8rem;
+      height: 1.5px;
+      background: var(--accent);
+    }
+
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2.8rem, 8vw, 6rem);
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      margin-bottom: 1.2rem;
+      animation: fadeUp 0.7s 0.2s both;
+    }
+
+    h1 .strike {
+      position: relative;
+      display: inline-block;
+      color: var(--muted);
+    }
+    h1 .strike::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: -4px;
+      right: -4px;
+      height: 3px;
+      background: var(--accent);
+      transform: translateY(-50%) scaleX(0);
+      transform-origin: left;
+      animation: strikeIn 0.6s 1.2s cubic-bezier(0.77,0,0.18,1) forwards;
+    }
+    @keyframes strikeIn { to { transform: translateY(-50%) scaleX(1); } }
+
+    .subtitle {
+      font-size: 1.05rem;
+      color: var(--muted);
+      font-weight: 300;
+      max-width: 44ch;
+      line-height: 1.7;
+      margin: 0 auto 3rem;
+      animation: fadeUp 0.7s 0.35s both;
+    }
+
+    /* construction tape banner */
+    .tape {
+      display: inline-flex;
+      align-items: center;
+      border: 2px solid var(--ink);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 3.5rem;
+      animation: fadeUp 0.7s 0.5s both;
+    }
+    .tape-block {
+      background: var(--accent2);
+      color: var(--ink);
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.65rem 1.3rem;
+    }
+    .tape-block.dark {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    /* TEAM */
+    .team-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.7s 0.6s both;
+    }
+
+    .team-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5px;
+      border: 1.5px solid var(--ink);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--ink);
+      max-width: 700px;
+      width: 100%;
+      animation: fadeUp 0.7s 0.7s both;
+    }
+
+    .team-card {
+      background: var(--card);
+      padding: 1.3rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      flex: 1 1 200px;
+      transition: background 0.2s;
+    }
+    .team-card:hover { background: var(--accent2); }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 0.8rem;
+      color: var(--paper);
+      flex-shrink: 0;
+    }
+
+    .team-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.3;
+      text-align: left;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1.5px solid var(--ink);
+      padding: 1.6rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    .footer-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      letter-spacing: -0.03em;
+    }
+    .footer-logo span { color: var(--accent); }
+
+    footer p {
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    @media (max-width: 600px) {
+      nav { padding: 1.2rem 1.5rem; }
+      footer { padding: 1.4rem 1.5rem; flex-direction: column; text-align: center; }
+    }
+  </style>
 </head>
 <body>
-<h1>This is a demo website for FLexiwork</h1>
+
+  <nav>
+    <div class="logo">Flexi<span>work</span></div>
+    <div class="nav-tag">Temp Job Finder</div>
+  </nav>
+
+  <main>
+
+    <!-- Animated gear icon -->
+    <div class="gear-wrap">
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M42 4h16l2.5 11.5a36 36 0 0 1 9.5 3.9l10.5-5.5 11.3 11.3-5.5 10.4A36 36 0 0 1 90.3 46L102 48.5v16L90.3 67a36 36 0 0 1-3.9 9.5l5.5 10.5-11.3 11.3-10.4-5.5A36 36 0 0 1 60.5 96.3L58 108H42l-2.5-11.7A36 36 0 0 1 30 92.4l-10.5 5.5L8.2 86.6l5.5-10.4A36 36 0 0 1 9.7 67L-2 64.5v-16L9.7 46a36 36 0 0 1 3.9-9.5L8.2 26.1 19.5 14.8 30 20.3a36 36 0 0 1 9.5-3.9Z" fill="#0d0d0d" transform="scale(0.9) translate(5,5)"/>
+        <circle cx="50" cy="50" r="14" fill="#f5f0e8"/>
+        <circle cx="50" cy="50" r="6" fill="#e84c2b"/>
+      </svg>
+    </div>
+
+    <div class="eyebrow">Under Construction</div>
+
+    <h1>We're <span class="strike">live</span><br>building.</h1>
+
+    <p class="subtitle">
+      Flexiwork — your go-to platform for temporary and short-term jobs — is currently under construction. Something great is on its way. Stay tuned!
+    </p>
+
+    <div class="tape">
+      <div class="tape-block">🚧 &nbsp;Work in Progress</div>
+      <div class="tape-block dark">Coming Soon &nbsp;🚧</div>
+    </div>
+
+    <div class="team-label">Built by our team</div>
+
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="avatar" style="background:#e84c2b;">TW</div>
+        <div class="team-name">Tshering Wangchuk</div>
+      </div>
+      <div class="team-card">
+        <div class="avatar" style="background:#2b6de8;">RW</div>
+        <div class="team-name">Rigden Wangpo</div>
+      </div>
+      <div class="team-card">
+        <div class="avatar" style="background:#2ba85e;">WT</div>
+        <div class="team-name">Wangchuk Tenzin</div>
+      </div>
+      <div class="team-card">
+        <div class="avatar" style="background:#8b2be8;">YL</div>
+        <div class="team-name">Yeshi Lhendup</div>
+      </div>
+      <div class="team-card">
+        <div class="avatar" style="background:#e87d2b;">PY</div>
+        <div class="team-name">Pema Yuden</div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <div class="footer-logo">Flexi<span>work</span></div>
+    <p>&copy; 2025 Flexiwork. All rights reserved.</p>
+    <p>Built with ♥ by the Flexiwork Team</p>
+  </footer>
+
 </body>
 </html>
